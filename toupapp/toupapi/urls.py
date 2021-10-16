@@ -5,6 +5,13 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('usuarios', views.UsuariosView)
+router.register('temas', views.TemasView)
+router.register('contratos', views.ContratosView)
+router.register('cargos', views.CargosView)
+router.register('trabajadores', views.TrabajadoresView)
+router.register('emprendedores', views.EmprendedoresView)
+router.register('proyectos', views.ProyectosView)
+
 urlpatterns = [
     #path('usuarios/', views.usuarios_list),
     #path('usuarios/<int:pk>', views.usuario_detail)
