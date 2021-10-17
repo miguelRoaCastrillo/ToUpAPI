@@ -11,6 +11,7 @@ router.register('cargos', views.CargosView)
 router.register('trabajadores', views.TrabajadoresView)
 router.register('emprendedores', views.EmprendedoresView)
 router.register('proyectos', views.ProyectosView)
+router.register('usrByParams', views.UsuariosByParamsView, basename='Usuario') 
 
 urlpatterns = [
     #path('usuarios/', views.usuarios_list),

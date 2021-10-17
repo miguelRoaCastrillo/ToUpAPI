@@ -48,7 +48,20 @@ def usuario_detail(request, pk):
     elif request.method == "DELETE":
         usuario.detele()
         return HttpResponse(status=204)
-    
+
+#Usuario segun parámetros
+class UsuariosByParamsView(viewsets.ModelViewSet):    
+    serializer_class = UsuarioSerializer    
+
+    #Busca por get
+    def get_queryset(self):        
+        username = self.request.query_params.get('username')
+        print(username)
+        if username is not None:
+            queryset = Usuario.objects.filter(usr_username = username)
+        return queryset
+
+
 #Temas
 class TemasView(viewsets.ModelViewSet):
     queryset = Tema.objects.all()
