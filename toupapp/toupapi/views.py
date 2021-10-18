@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
@@ -217,6 +218,34 @@ def trabajadores_detail(request, pk):
         trabajador.delete()
         return HttpResponse(status=204)
      
+#Para traer trabajadores segun los temas que se busquen
+class TrabadoresByParamsView(viewsets.ModelViewSet):
+    serializer_class = TrabajadorSerializer
+
+    def get_queryset(self):
+        temaparam = self.request.query_params.get('tema')
+        print(temaparam)
+        if temaparam is not None:            
+
+            cargos = Cargo.objects.filter(car_tema = temaparam)
+            trabajadores = Trabajador.objects.all()
+
+            print(cargos)
+            print(trabajadores)
+
+            data = []
+
+            for cargo in cargos:
+                print(cargo.car_id)
+                for trabajador in trabajadores:
+                    print(trabajador.tra_car_id)
+                    if trabajador.tra_car_id.car_id == cargo.car_id:
+                        print("Los cargos coincidieron")
+                        data.append(trabajador)      
+                        
+
+        return data
+            
 #Emprendedores
 class EmprendedoresView(viewsets.ModelViewSet):
     queryset = Emprendedor.objects.all()

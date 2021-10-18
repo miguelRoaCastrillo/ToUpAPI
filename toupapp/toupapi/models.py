@@ -33,6 +33,8 @@ class cargo(models.Model):
     car_id = models.AutoField(primary_key=True)
     car_nombre = models.CharField(max_length=100)
     car_desc = models.CharField(max_length=150)
+    car_tema = models.ManyToManyField(tema)
+    
     def __str__(self):
         return "El id del cargo es:" + str(self.car_id) + " y su nombre es: " + self.car_nombre
 
@@ -40,9 +42,8 @@ class cargo(models.Model):
 class trabajador(models.Model):
     tra_id = models.AutoField(primary_key=True)
     tra_usr_id = models.ForeignKey(usuario, on_delete=models.CASCADE)
-    tra_car_id = models.ForeignKey(cargo, on_delete=models.CASCADE)
-    tra_cont_id = models.ForeignKey(contrato, on_delete=models.CASCADE)
-    
+    tra_car_id = models.ForeignKey(cargo, on_delete=models.CASCADE)    
+
     def __str__(self):
         return "El id del trabajador es: " + str(self.tra_id)
 
@@ -62,6 +63,7 @@ class proyecto(models.Model):
     pro_nombre = models.CharField(max_length=150)
     pro_tem_id = models.ForeignKey(tema, on_delete=models.CASCADE)
     pro_users = models.ManyToManyField(usuario)
+    pro_desc = models.CharField(max_length=300, null=True)
 
     def __str__(self):
         return str(self.pro_id) + ": " + self.pro_nombre

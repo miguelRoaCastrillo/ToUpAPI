@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from toupapi.models import usuario, tema, contrato as Contrato, cargo, trabajador as Trabajador, emprendedor as Emprendedor, proyecto as Proyecto
+from toupapi.models import usuario, tema, contrato as Contrato, cargo as Cargo, trabajador as Trabajador, emprendedor as Emprendedor, proyecto as Proyecto
 
 
 class UsuarioSerializer(serializers.Serializer):
@@ -47,26 +47,15 @@ class ContratoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ("cont_id", "cont_tem_id")
 
 
-class CargoSerializer(serializers.Serializer):
-    car_id = serializers.IntegerField(read_only=True)
-    car_nombre = serializers.CharField(required=True, allow_blank=False, max_length=100)
-    car_desc = serializers.CharField(required=True, allow_blank=False, max_length=150)
-
-    def create(self, validated_data):
-        return cargo.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.car_id = validated_data.get("car_id", instance.car_id)
-        instance.car_nombre = validated_data.get("car_nombre", instance.car_nombre)
-        instance.car_desc = validated_data.get("car_desc", instance.car_desc)
-
-        instance.save()
-        return instance
+class CargoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Cargo
+        fields = ("car_id", "car_nombre", "car_desc", "car_tema")
 
 class TrabajadorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Trabajador
-        fields = ("tra_id", "tra_usr_id", "tra_car_id", "tra_cont_id")
+        fields = ("tra_id", "tra_usr_id", "tra_car_id")
 
 class EmprendedorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -76,5 +65,5 @@ class EmprendedorSerializer(serializers.HyperlinkedModelSerializer):
 class ProyectoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Proyecto
-        fields = ("pro_id", "pro_nombre", "pro_tem_id", "pro_users")
+        fields = ("pro_id", "pro_nombre", "pro_tem_id", "pro_users", "pro_desc")
 
