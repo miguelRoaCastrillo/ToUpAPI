@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.deletion import CASCADE
 
 #Usuario del programa, que a su vez puede ser un trabajador o emprendedor
 class usuario(models.Model):
@@ -24,7 +23,7 @@ class tema(models.Model):
 #Contrato que se le "da" a los trabajadores para cumplir con lo establecido por la startup
 class contrato(models.Model):
     cont_id = models.AutoField(primary_key=True)
-    cont_tem_id = models.ForeignKey(tema, on_delete=CASCADE)
+    cont_tem_id = models.ForeignKey(tema, on_delete=models.CASCADE)
     def __str__(self):
         return "El id del contrato es: " + str(self.cont_id)
 
@@ -40,23 +39,29 @@ class cargo(models.Model):
 #trabajador del proyecto de startup del emprendedor
 class trabajador(models.Model):
     tra_id = models.AutoField(primary_key=True)
-    tra_usr_id = models.ForeignKey(usuario, on_delete=CASCADE)
-    tra_car_id = models.ForeignKey(cargo, on_delete=CASCADE)
-    tra_cont_id = models.ForeignKey(contrato, on_delete=CASCADE)
+    tra_usr_id = models.ForeignKey(usuario, on_delete=models.CASCADE)
+    tra_car_id = models.ForeignKey(cargo, on_delete=models.CASCADE)
+    tra_cont_id = models.ForeignKey(contrato, on_delete=models.CASCADE)
+    
     def __str__(self):
         return "El id del trabajador es: " + str(self.tra_id)
 
 #Uusuario que emprende el proyecto, y busca trabajadores bajo un contrato establecido por él y por la aplicación
 class emprendedor(models.Model):
+
     emp_id = models.AutoField(primary_key=True)
-    emp_usr_id = models.ForeignKey(usuario, on_delete=CASCADE)
+    emp_usr_id = models.ForeignKey(usuario, on_delete=models.CASCADE)
+
     def __str__(self):
-        return "El id del emprendedor es: " + str(self.emp_id)
+        return "Emprendedor: " + str(self.emp_id) + ", usr_id: " + self.emp_usr_id
 
 #Lo que crea el emprendedor para emprender
 class proyecto(models.Model):
+
     pro_id = models.AutoField(primary_key=True)
     pro_nombre = models.CharField(max_length=150)
-    pro_tem_id = models.ForeignKey(tema, on_delete=CASCADE)
+    pro_tem_id = models.ForeignKey(tema, on_delete=models.CASCADE)
+    pro_users = models.ManyToManyField(usuario)
+
     def __str__(self):
-        return "El id del proyecto es: " + str(self.pro_id)
+        return str(self.pro_id) + ": " + self.pro_nombre

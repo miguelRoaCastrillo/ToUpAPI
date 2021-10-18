@@ -1,5 +1,5 @@
 from django.contrib import admin
-from toupapi.models import usuario, tema, contrato, cargo, trabajador, emprendedor
+from toupapi.models import usuario, tema, contrato, cargo, trabajador, emprendedor, proyecto
 
 # Register your models here.
 admin.site.register(usuario)
@@ -8,3 +8,4 @@ admin.site.register(contrato)
 admin.site.register(cargo)
 admin.site.register(trabajador)
 admin.site.register(emprendedor)
+admin.site.register(proyecto)

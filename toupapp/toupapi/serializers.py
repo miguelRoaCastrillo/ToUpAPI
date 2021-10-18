@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from toupapi.models import usuario, tema, contrato, cargo, trabajador, emprendedor, proyecto
+from toupapi.models import usuario, tema, contrato as Contrato, cargo, trabajador as Trabajador, emprendedor as Emprendedor, proyecto as Proyecto
 
 
 class UsuarioSerializer(serializers.Serializer):
@@ -41,19 +41,11 @@ class TemaSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-class ContratoSerializer(serializers.Serializer):
-    cont_id = serializers.IntegerField(read_only=True)
-    cont_tem_id = serializers.IntegerField(read_only=True)
+class ContratoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Contrato
+        fields = ("cont_id", "cont_tem_id")
 
-    def create(self, validated_data):
-        return contrato.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.cont_id = validated_data.get("cont_id", instance.cont_id)
-        instance.cont_tem_id = validated_data.get("cont_tem_id", instance.cont_tem_id)
-
-        instance.save()
-        return instance
 
 class CargoSerializer(serializers.Serializer):
     car_id = serializers.IntegerField(read_only=True)
@@ -71,51 +63,18 @@ class CargoSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-class TrabajadorSerializer(serializers.Serializer):
-    tra_id = serializers.IntegerField(read_only=True)
-    tra_usr_id = serializers.IntegerField(read_only=True)
-    tra_car_id = serializers.IntegerField(read_only=True)
-    tra_cont_id = serializers.IntegerField(read_only=True)
+class TrabajadorSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Trabajador
+        fields = ("tra_id", "tra_usr_id", "tra_car_id", "tra_cont_id")
 
-    def create(self, validated_data):
-        return trabajador.objects.create(**validated_data)
+class EmprendedorSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Emprendedor
+        fields = ("emp_id", "emp_usr_id")
 
-    def update(self, instance, validated_data):
-        instance.tra_id = validated_data.get("tra_id", instance.tra_id)
-        instance.tra_usr_id = validated_data.get("tra_usr_id", instance.tra_usr_id)
-        instance.tra_car_id = validated_data.get("tra_car_id", instance.tra_car_id)
-        instance.tra_cont_id = validated_data.get("tra_cont_id", instance.tra_cont_id)
-        
-        instance.save()
-        return instance
-
-class EmprendedorSerializer(serializers.Serializer):
-    emp_id = serializers.IntegerField(read_only=True)
-    emp_usr_id = serializers.IntegerField(read_only=True)
-
-    def create(self, validated_data):
-        return emprendedor.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.emp_id = validated_data.get("emp_id", instance.emp_id)
-        instance.emp_usr_id = validated_data.get("emp_usr_id", instance.emp_usr_id)
-
-        instance.save()
-        return instance
-
-class ProyectoSerializer(serializers.Serializer):
-    pro_id = serializers.IntegerField(read_only=True)
-    pro_nombre = serializers.CharField(required=True, allow_blank=False, max_length=150)
-    pro_tem_id = serializers.IntegerField(read_only=True)
-
-    def create(self, validated_data):
-        return proyecto.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.pro_id = validated_data.get("pro_id", instance.pro_id)
-        instance.pro_nombre = validated_data.get("pro_nombre", instance.pro_nombre)
-        instance.pro_tem_id = validated_data.get("pro_tem_id", instance.pro_tem_id)
-
-        instance.save()
-        return instance
+class ProyectoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Proyecto
+        fields = ("pro_id", "pro_nombre", "pro_tem_id", "pro_users")
 
