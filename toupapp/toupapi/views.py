@@ -227,13 +227,11 @@ class TrabadoresByParamsView(viewsets.ModelViewSet):
         print(temaparam)
         if temaparam is not None:            
 
-            cargos = Cargo.objects.filter(car_tema = temaparam)
+            cargos = Cargo.objects.filter(car_tema = temaparam)            
             trabajadores = Trabajador.objects.all()
-
-            print(cargos)
-            print(trabajadores)
-
             data = []
+
+            print(cargos)            
 
             for cargo in cargos:
                 print(cargo.car_id)
@@ -243,9 +241,10 @@ class TrabadoresByParamsView(viewsets.ModelViewSet):
 
                         print("Los cargos coincidieron")
 
-            print("Termina el bucle")
-            print(trabajadores)
-        return trabajadores
+                        data.append(trabajador)
+
+            print("Termina el bucle")            
+        return data
             
 #Emprendedores
 class EmprendedoresView(viewsets.ModelViewSet):

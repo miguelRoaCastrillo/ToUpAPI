@@ -40,22 +40,24 @@ class TrabajadorSerializer(serializers.HyperlinkedModelSerializer):
 
 class TrabajadorByTemaSerializer(serializers.ModelSerializer):    
 
-    tra_nombre = serializers.CharField(source='tra_usr_id.usr_nombre')
+    tra_usr_nombre = serializers.CharField(source='tra_usr_id.usr_nombre')
     tra_usr_apellidoPaterno = serializers.CharField(source='tra_usr_id.usr_apellidoPaterno')
     tra_usr_apellidoMaterno = serializers.CharField(source='tra_usr_id.usr_apellidoMaterno')
     tra_usr_mail = serializers.CharField(source='tra_usr_id.usr_mail')
-    tra_usrname = serializers.CharField(source='tra_usr_id.usr_username')
+    tra_usr_usrname = serializers.CharField(source='tra_usr_id.usr_username')
+    tra_car_nombre = serializers.CharField(source='tra_car_id.car_nombre')
 
     class Meta:
         model= Trabajador
         fields = (
             'tra_id'
-            , 'tra_nombre'
+            , 'tra_usr_nombre'
             , 'tra_usr_apellidoPaterno'
             , 'tra_usr_apellidoMaterno'
             , 'tra_usr_mail'
-            , 'tra_usrname'
+            , 'tra_usr_usrname'
             , 'tra_car_id'
+            , 'tra_car_nombre'
         )
 
 class EmprendedorSerializer(serializers.ModelSerializer):
