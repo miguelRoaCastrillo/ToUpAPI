@@ -9,8 +9,12 @@ class usuario(models.Model):
     usr_nombre = models.CharField(max_length=50)
     usr_apellidoPaterno = models.CharField(max_length=50)
     usr_apellidoMaterno = models.CharField(max_length=50)
-    def __str__(self): #Para que cuando se busque tal modelo o se obtenga información de él, retorne lo indicado
-        return "El id del usuario es: " + str(self.usr_id) + " y su nombre es: " + self.usr_username
+
+    def __str__(self): 
+        return "id_usuario: " + str(self.usr_id) + ", nombre: " + self.usr_nombre
+
+    def __unicode__(self):
+        return self.usr_id
 
 #Tema de la startup, de que trata el proyecto o algo relacionado a él
 class tema(models.Model):
@@ -45,7 +49,7 @@ class trabajador(models.Model):
     tra_car_id = models.ForeignKey(cargo, on_delete=models.CASCADE)    
 
     def __str__(self):
-        return "El id del trabajador es: " + str(self.tra_id)
+        return "id_trabajador: " + str(self.tra_id) + ", tra_usr_id: " + str(self.tra_usr_id)
 
 #Uusuario que emprende el proyecto, y busca trabajadores bajo un contrato establecido por él y por la aplicación
 class emprendedor(models.Model):

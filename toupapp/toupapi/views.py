@@ -5,7 +5,7 @@ from django.shortcuts import render
 from rest_framework import serializers, viewsets
 from rest_framework.parsers import JSONParser
 from toupapi.models import usuario as Usuario, tema as Tema, contrato as Contrato, cargo as Cargo, trabajador as Trabajador, emprendedor as Emprendedor, proyecto as Proyecto
-from toupapi.serializers import UsuarioSerializer, TemaSerializer, ContratoSerializer, CargoSerializer, TrabajadorSerializer, EmprendedorSerializer, ProyectoSerializer
+from toupapi.serializers import UsuarioSerializer, TemaSerializer, ContratoSerializer, CargoSerializer, TrabajadorSerializer, EmprendedorSerializer, ProyectoSerializer, TrabajadorByTemaSerializer
 
 # Usuarios
 class UsuariosView(viewsets.ModelViewSet):
@@ -220,7 +220,7 @@ def trabajadores_detail(request, pk):
      
 #Para traer trabajadores segun los temas que se busquen
 class TrabadoresByParamsView(viewsets.ModelViewSet):
-    serializer_class = TrabajadorSerializer
+    serializer_class = TrabajadorByTemaSerializer
 
     def get_queryset(self):
         temaparam = self.request.query_params.get('tema')
@@ -240,11 +240,12 @@ class TrabadoresByParamsView(viewsets.ModelViewSet):
                 for trabajador in trabajadores:
                     print(trabajador.tra_car_id)
                     if trabajador.tra_car_id.car_id == cargo.car_id:
-                        print("Los cargos coincidieron")
-                        data.append(trabajador)      
-                        
 
-        return data
+                        print("Los cargos coincidieron")
+
+            print("Termina el bucle")
+            print(trabajadores)
+        return trabajadores
             
 #Emprendedores
 class EmprendedoresView(viewsets.ModelViewSet):

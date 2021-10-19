@@ -1,29 +1,10 @@
 from rest_framework import serializers
-from toupapi.models import usuario, tema, contrato as Contrato, cargo as Cargo, trabajador as Trabajador, emprendedor as Emprendedor, proyecto as Proyecto
+from toupapi.models import usuario as Usuario, tema, contrato as Contrato, cargo as Cargo, trabajador as Trabajador, emprendedor as Emprendedor, proyecto as Proyecto
 
-
-class UsuarioSerializer(serializers.Serializer):
-    usr_id = serializers.IntegerField(read_only=True)
-    usr_username = serializers.CharField(required=True, allow_blank=False, max_length=50)
-    usr_mail = serializers.CharField(required=True, allow_blank=False, max_length=150)
-    usr_pass = serializers.CharField(required=True, allow_blank=False, max_length=150)
-    usr_nombre = serializers.CharField(required=True, allow_blank=False, max_length=50)
-    usr_apellidoPaterno = serializers.CharField(required=True, allow_blank=False, max_length=50)
-    usr_apellidoMaterno = serializers.CharField(required=True, allow_blank=False, max_length=50)
-
-    def create(self, validated_data):
-        return usuario.objects.create(**validated_data)
-    def update(self, instance, validated_data):
-        instance.usr_id = validated_data.get("usr_id", instance.usr_id)
-        instance.usr_username = validated_data.get("usr_username", instance.usr_username)
-        instance.usr_mail = validated_data.get("usr_mail", instance.usr_mail)
-        instance.usr_pass = validated_data.get("usr_pass", instance.usr_pass)
-        instance.usr_nombre = validated_data.get("usr_nombre", instance.usr_nombre)
-        instance.usr_apellidoPaterno = validated_data.get("usr_apellidoPaterno", instance.usr_apellidoPaterno)
-        instance.usr_apellidoMaterno = validated_data.get("usr_apellidoMaterno", instance.usr_apellidoMaterno)
-
-        instance.save()
-        return instance
+class UsuarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ["usr_id", "usr_username", "usr_mail", "usr_mail", "usr_pass", "usr_nombre", "usr_apellidoPaterno", "usr_apellidoMaterno"]
 
 class TemaSerializer(serializers.Serializer):
     tem_id = serializers.IntegerField(read_only=True)
@@ -57,7 +38,28 @@ class TrabajadorSerializer(serializers.HyperlinkedModelSerializer):
         model = Trabajador
         fields = ("tra_id", "tra_usr_id", "tra_car_id")
 
-class EmprendedorSerializer(serializers.HyperlinkedModelSerializer):
+class TrabajadorByTemaSerializer(serializers.ModelSerializer):    
+
+    tra_nombre = serializers.CharField(source='tra_usr_id.usr_nombre')
+    tra_usr_apellidoPaterno = serializers.CharField(source='tra_usr_id.usr_apellidoPaterno')
+    tra_usr_apellidoMaterno = serializers.CharField(source='tra_usr_id.usr_apellidoMaterno')
+    tra_usr_mail = serializers.CharField(source='tra_usr_id.usr_mail')
+    tra_usrname = serializers.CharField(source='tra_usr_id.usr_username')
+
+    class Meta:
+        model= Trabajador
+        fields = (
+            'tra_id'
+            , 'tra_nombre'
+            , 'tra_usr_apellidoPaterno'
+            , 'tra_usr_apellidoMaterno'
+            , 'tra_usr_mail'
+            , 'tra_usrname'
+            , 'tra_car_id'
+        )
+
+class EmprendedorSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Emprendedor
         fields = ("emp_id", "emp_usr_id")
