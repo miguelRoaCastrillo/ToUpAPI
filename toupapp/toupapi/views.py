@@ -7,6 +7,7 @@ from rest_framework.parsers import JSONParser
 from toupapi.models import usuario as Usuario, tema as Tema, contrato as Contrato, cargo as Cargo, trabajador as Trabajador, emprendedor as Emprendedor, proyecto as Proyecto
 from toupapi.serializers import UsuarioSerializer, TemaSerializer, ContratoSerializer, CargoSerializer, TrabajadorSerializer, EmprendedorSerializer, ProyectoSerializer, TrabajadorByTemaSerializer
 
+
 # Usuarios
 class UsuariosView(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
@@ -324,3 +325,61 @@ def emprendedores_detail(request, pk):
     elif request.method == "DELETE":
         proyecto.delete()
         return HttpResponse(status=204)
+
+
+#Para machineLearning
+import pandas 
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+import numpy as np
+
+def predicionResults(request):
+
+    #Ruta relativa en caso de pruebas
+    datos_cargo = pandas.read_csv(r"/home/miguelroa/PythonProjects/toUpAPI/toupapp/toupapi/machine.csv", header=0)
+    datos_cargo = datos_cargo.drop(columns=['id'])
+    datos_cargo = datos_cargo.drop(columns=['trabajador'])    
+
+    valores_tema = {'tema': {'informatica':1, 'culinaria':2, 'deportista':3, 'computacion':4, 'arte':5, 'cocina':1, 'marketing':1}}
+    datos_cargo.replace(valores_tema, inplace=True)
+
+    valores_cargo = {
+        'cargo': {
+            'desarrollador': 1,
+            'programador':2,
+            'comensal':3,
+            'futbolista':4,
+            'tecnico':5,
+            'pintor':6,
+            'ayudante':7,
+            'comunity':8,
+            'chef':9,
+            'lavaplatos':10,
+            'QA':11,
+            'cantante':12,
+            'manager':13,
+            'asistente':14
+        }
+    }
+
+    datos_cargo.replace(valores_cargo, inplace=True)
+    
+    datos_entrenamiento = datos_cargo.sample(frac=0.8, random_state=0)
+    datos_test = datos_cargo.drop(datos_entrenamiento.index)
+
+    etiquetas_entrenamiento = datos_entrenamiento.pop('cargo')
+    etiquetas_test = datos_test.pop('cargo')
+    
+    modelo = LinearRegression()
+    modelo.fit(datos_entrenamiento,etiquetas_entrenamiento)
+
+    predicciones = modelo.predict(datos_test)
+
+    error = np.sqrt(mean_squared_error(etiquetas_test, predicciones))
+    print("Error porcentual: %f" % (error*100))
+
+    nuevo_trabajador = pandas.DataFrame(np.array([[1,4]]), columns=['tema', 'años'])
+
+    data = modelo.predict(nuevo_trabajador)
+
+    return HttpResponse("prediccion: " + data)

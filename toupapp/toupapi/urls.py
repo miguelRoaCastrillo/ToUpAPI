@@ -14,8 +14,10 @@ router.register('proyectos', views.ProyectosView)
 router.register('usrByParams', views.UsuariosByParamsView, basename='Usuario') 
 router.register('TrabadoresByParamsView', views.TrabadoresByParamsView, basename='Tema')
 
+
 urlpatterns = [
     #path('usuarios/', views.usuarios_list),
     #path('usuarios/<int:pk>', views.usuario_detail)
-    path('api/', include(router.urls))    
+    path('api/', include(router.urls)),
+    path('prediccion/', views.predicionResults)
 ]

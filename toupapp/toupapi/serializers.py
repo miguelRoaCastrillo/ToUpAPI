@@ -70,4 +70,4 @@ class ProyectoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Proyecto
         fields = ("pro_id", "pro_nombre", "pro_tem_id", "pro_users", "pro_desc")
-
+    
